@@ -2,6 +2,7 @@ services:
   - type: web
     name: freelance-escrow-dapp
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     healthCheckPath: /api/health
