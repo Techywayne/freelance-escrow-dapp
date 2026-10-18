@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d594f">
+  <title>FairPay Escrow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="FairPay home">
+      <span class="brand-mark">FP</span>
+      <span>FairPay Escrow</span>
+    </a>
+    <button id="connect-wallet" class="button compact" type="button">Connect wallet</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">SEPOLIA TESTNET DAPP</p>
+        <h1>Freelance payments with clear rules.</h1>
+        <p class="hero-copy">Fund a job, release payment after delivery, or ask a nominated arbiter to resolve a dispute. Every decision is recorded on-chain.</p>
+      </div>
+      <dl class="connection-card" aria-label="Wallet connection details">
+        <div><dt>Wallet</dt><dd id="wallet-value">Not connected</dd></div>
+        <div><dt>Network</dt><dd id="network-value">Not detected</dd></div>
+        <div><dt>Contract</dt><dd id="contract-value">Loading…</dd></div>
+      </dl>
+    </section>
+
+    <div id="status" class="status" role="status" aria-live="polite">Loading application configuration…</div>
+
+    <section id="contract-setup" class="panel hidden" aria-labelledby="contract-setup-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LOCAL SETUP</p>
+          <h2 id="contract-setup-title">Add the deployed contract</h2>
+        </div>
+      </div>
+      <p class="muted">The server has no contract address yet. Deploy the Solidity contract to Sepolia and enter its address for this browser.</p>
+      <div class="inline-form">
+        <label class="field grow">
+          <span>Contract address</span>
+          <input id="manual-contract" type="text" placeholder="0x…" autocomplete="off" spellcheck="false">
+        </label>
+        <button id="save-contract" class="button" type="button">Use contract</button>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel" aria-labelledby="create-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">NEW AGREEMENT</p>
+            <h2 id="create-title">Create funded escrow</h2>
+          </div>
+          <span class="step">01</span>
+        </div>
+
+        <form id="create-form">
+          <label class="field">
+            <span>Service reference</span>
+            <input id="reference" type="text" maxlength="120" required placeholder="Example: Website redesign milestone 1">
+            <small>Publicly stored on the blockchain. Do not include private information.</small>
+          </label>
+          <label class="field">
+            <span>Freelancer wallet</span>
+            <input id="payee" type="text" required placeholder="0x…" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>Arbiter wallet</span>
+            <input id="arbiter" type="text" required placeholder="0x…" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>Payment amount</span>
+            <div class="amount-input">
+              <input id="amount" type="number" min="0" step="any" required placeholder="0.01">
+              <span>ETH</span>
+            </div>
+          </label>
+          <button id="create-submit" class="button full" type="submit" disabled>Fund escrow with MetaMask</button>
+        </form>
+      </section>
+
+      <section class="panel records" aria-labelledby="records-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ON-CHAIN RECORDS</p>
+            <h2 id="records-title">My escrows</h2>
+          </div>
+          <button id="refresh" class="button ghost compact" type="button" disabled>Refresh</button>
+        </div>
+        <p id="empty-state" class="empty-state">Connect your wallet to load agreements where you are the payer, freelancer, or arbiter.</p>
+        <div id="escrow-list" class="escrow-list"></div>
+      </section>
+    </div>
+
+    <section class="panel activity" aria-labelledby="activity-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CURRENT SESSION</p>
+          <h2 id="activity-title">Transaction activity</h2>
+        </div>
+      </div>
+      <ol id="activity-list" class="activity-list">
+        <li class="muted">Confirmed transactions from this browser session will appear here.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>FairPay is an educational testnet application. Do not send real funds.</p>
+  </footer>
+
+  <template id="escrow-template">
+    <article class="escrow-card">
+      <div class="escrow-card-header">
+        <div><span class="escrow-id"></span><h3 class="escrow-reference"></h3></div>
+        <span class="badge escrow-status"></span>
+      </div>
+      <dl class="escrow-details">
+        <div><dt>Amount</dt><dd class="escrow-amount"></dd></div>
+        <div><dt>Payer</dt><dd class="escrow-payer"></dd></div>
+        <div><dt>Freelancer</dt><dd class="escrow-payee"></dd></div>
+        <div><dt>Arbiter</dt><dd class="escrow-arbiter"></dd></div>
+        <div><dt>Created</dt><dd class="escrow-created"></dd></div>
+      </dl>
+      <div class="escrow-actions"></div>
+    </article>
+  </template>
+</body>
+</html>
